@@ -1,12 +1,12 @@
-import { Product } from '../data/menuData';
-import AvailabilityToggle from './AvailabilityToggle';
-import { RiShoppingBasket2Fill } from "react-icons/ri";
-import { Button } from '@mantine/core'; // Importăm Button din Mantine
+import { Product } from '../data/menuData'
+import AvailabilityToggle from './AvailabilityToggle'
+import { RiShoppingBasket2Fill } from 'react-icons/ri'
+import { Button } from '@mantine/core'
 
 interface ProductCardProps {
-  product: Product;
-  onToggle: () => void;
-  onAddToOrder: () => void;
+  product: Product
+  onToggle: () => void
+  onAddToOrder: () => void
 }
 
 const ProductCard = ({ product, onToggle, onAddToOrder }: ProductCardProps) => {
@@ -31,10 +31,10 @@ const ProductCard = ({ product, onToggle, onAddToOrder }: ProductCardProps) => {
 
       <div className="flex justify-between items-center mt-4">
         <AvailabilityToggle available={product.available} onToggle={onToggle} />
-        
+
         {product.available && (
           <Button
-          variant="outline"
+            variant="outline"
             onClick={onAddToOrder}
             className="bg-red-700 text-white hover:bg-red-800 py-2 px-4 rounded-full flex items-center gap-2"
             leftSection={<RiShoppingBasket2Fill size={14} />}
@@ -45,7 +45,7 @@ const ProductCard = ({ product, onToggle, onAddToOrder }: ProductCardProps) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductCard;
+export default ProductCard

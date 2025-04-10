@@ -1,22 +1,28 @@
-import { Drawer, Text, Button, Divider, Group } from '@mantine/core';
+import { Drawer, Text, Button, Divider, Group } from '@mantine/core'
 
 interface OrderItem {
-  id: string;
-  name: string;
-  quantity: number;
-  subtotal: number;
+  id: string
+  name: string
+  quantity: number
+  subtotal: number
 }
 
 interface OrderDrawerProps {
-  opened: boolean;
-  onClose: () => void;
-  order: OrderItem[];
-  onRemove: (productId: string) => void;
-  onClear: () => void;
+  opened: boolean
+  onClose: () => void
+  order: OrderItem[]
+  onRemove: (productId: string) => void
+  onClear: () => void
 }
 
-const OrderDrawer = ({ opened, onClose, order, onRemove, onClear }: OrderDrawerProps) => {
-  const total = order.reduce((sum, item) => sum + item.subtotal, 0);
+const OrderDrawer = ({
+  opened,
+  onClose,
+  order,
+  onRemove,
+  onClear
+}: OrderDrawerProps) => {
+  const total = order.reduce((sum, item) => sum + item.subtotal, 0)
 
   return (
     <Drawer
@@ -29,13 +35,15 @@ const OrderDrawer = ({ opened, onClose, order, onRemove, onClear }: OrderDrawerP
       overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
     >
       {order.length === 0 ? (
-        <Text >Your order is empty.</Text>
+        <Text>Your order is empty.</Text>
       ) : (
         <>
           {order.map((item) => (
-            <Group key={item.id}  mb="sm">
+            <Group key={item.id} mb="sm">
               <div>
-                <Text>{item.name} × {item.quantity}</Text>
+                <Text>
+                  {item.name} × {item.quantity}
+                </Text>
                 <Text size="xs">${item.subtotal.toFixed(2)}</Text>
               </div>
               <Button
@@ -50,9 +58,9 @@ const OrderDrawer = ({ opened, onClose, order, onRemove, onClear }: OrderDrawerP
           ))}
 
           <Divider my="sm" />
-          <Group  mt="md">
-            <Text >Total:</Text>
-            <Text >${total.toFixed(2)}</Text>
+          <Group mt="md">
+            <Text>Total:</Text>
+            <Text>${total.toFixed(2)}</Text>
           </Group>
 
           <Button
@@ -60,13 +68,14 @@ const OrderDrawer = ({ opened, onClose, order, onRemove, onClear }: OrderDrawerP
             color="red"
             fullWidth
             onClick={onClear}
+            variant="light"
           >
             Clear Order
           </Button>
         </>
       )}
     </Drawer>
-  );
-};
+  )
+}
 
-export default OrderDrawer;
+export default OrderDrawer

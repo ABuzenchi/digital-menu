@@ -3,6 +3,7 @@ import { menuData as initialMenuData } from '../data/menuData'
 import ProductCard from './ProductCard'
 import OrderDrawer from './OrderDrawer'
 import { Button } from '@mantine/core'
+import SearchBar from './SearchBar'
 
 interface OrderItem {
   id: string
@@ -10,20 +11,23 @@ interface OrderItem {
   quantity: number
   subtotal: number
 }
+
 const MenuDisplay = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
   const [menu, setMenu] = useState(initialMenuData)
   const [order, setOrder] = useState<OrderItem[]>([])
+  const [drawerOpened, setDrawerOpened] = useState(false)
+
   const categories = menu.map((cat) => cat.category)
-  const [drawerOpened, setDrawerOpened] = useState(false);
 
-const handleRemoveFromOrder = (productId: string) => {
-  setOrder((prev) => prev.filter((item) => item.id !== productId));
-};
+  const handleRemoveFromOrder = (productId: string) => {
+    setOrder((prev) => prev.filter((item) => item.id !== productId))
+  }
 
-const handleClearOrder = () => {
-  setOrder([]);
-};
+  const handleClearOrder = () => {
+    setOrder([])
+  }
 
   const handleToggleAvailability = (categoryId: string, productId: string) => {
     const updatedMenu = menu.map((category) => {
@@ -64,11 +68,17 @@ const handleClearOrder = () => {
     ? menu.filter((cat) => cat.category === selectedCategory)
     : menu
 
+  const filteredProducts = filteredData.map((category) => {
+    const filteredProducts = category.products.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    return { ...category, products: filteredProducts }
+  })
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-center text-red-800 mb-6">Menu</h1>
-
-      <div className="flex flex-wrap justify-center gap-3 mb-8">
+      <div className="flex flex-wrap justify-center gap-3 mb-4">
         <button
           onClick={() => setSelectedCategory(null)}
           className={`px-4 py-2 rounded-full border ${
@@ -94,7 +104,11 @@ const handleClearOrder = () => {
         ))}
       </div>
 
-      {filteredData.map((category) => (
+      <div className="flex justify-end mb-8">
+        <SearchBar query={searchQuery} onSearch={setSearchQuery} />
+      </div>
+
+      {filteredProducts.map((category) => (
         <div key={category.id} className="mb-10">
           <h2 className="text-2xl font-bold text-red-700 mb-4 border-b border-red-300 pb-2">
             {category.category}
@@ -116,10 +130,11 @@ const handleClearOrder = () => {
           </div>
         </div>
       ))}
+
       {order.length > 0 && (
         <div className="fixed bottom-6 right-6 z-50">
           <Button
-         variant="light"
+            variant="light"
             onClick={() => setDrawerOpened(true)}
             className="bg-red-700 text-white px-6 py-3 rounded-full shadow-md hover:bg-red-800 transition"
             color="red"
