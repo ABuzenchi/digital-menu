@@ -1,4 +1,4 @@
-import MenuDisplay from 'components/MenuDispaly'
+import MenuDisplay from 'components/MenuDisplay'
 import { menuData } from '../data/menuData'
 
 const Menu = () => {
