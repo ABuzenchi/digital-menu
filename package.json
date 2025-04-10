@@ -18,6 +18,8 @@
     "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@mantine/core": "^7.17.4",
+    "@mantine/hooks": "^7.17.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.4.1"

@@ -1,16 +1,32 @@
-import { useState } from 'react';
-import { menuData as initialMenuData } from '../data/menuData';
-import ProductCard from './ProductCard';
+import { useState } from 'react'
+import { menuData as initialMenuData } from '../data/menuData'
+import ProductCard from './ProductCard'
+import OrderDrawer from './OrderDrawer'
 
+interface OrderItem {
+  id: string
+  name: string
+  quantity: number
+  subtotal: number
+}
 const MenuDisplay = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [menu, setMenu] = useState(initialMenuData); 
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [menu, setMenu] = useState(initialMenuData)
+  const [order, setOrder] = useState<OrderItem[]>([])
+  const categories = menu.map((cat) => cat.category)
+  const [drawerOpened, setDrawerOpened] = useState(false);
 
-  const categories = menu.map((cat) => cat.category);
+const handleRemoveFromOrder = (productId: string) => {
+  setOrder((prev) => prev.filter((item) => item.id !== productId));
+};
+
+const handleClearOrder = () => {
+  setOrder([]);
+};
 
   const handleToggleAvailability = (categoryId: string, productId: string) => {
     const updatedMenu = menu.map((category) => {
-      if (category.id !== categoryId) return category;
+      if (category.id !== categoryId) return category
 
       return {
         ...category,
@@ -18,16 +34,34 @@ const MenuDisplay = () => {
           product.id === productId
             ? { ...product, available: !product.available }
             : product
-        ),
-      };
-    });
+        )
+      }
+    })
 
-    setMenu(updatedMenu);
-  };
+    setMenu(updatedMenu)
+  }
+
+  const handleAddToOrder = (productId: string, name: string, price: number) => {
+    setOrder((prev) => {
+      const existing = prev.find((item) => item.id === productId)
+      if (existing) {
+        return prev.map((item) =>
+          item.id === productId
+            ? {
+                ...item,
+                quantity: item.quantity + 1,
+                subtotal: (item.quantity + 1) * price
+              }
+            : item
+        )
+      }
+      return [...prev, { id: productId, name, quantity: 1, subtotal: price }]
+    })
+  }
 
   const filteredData = selectedCategory
     ? menu.filter((cat) => cat.category === selectedCategory)
-    : menu;
+    : menu
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -70,14 +104,37 @@ const MenuDisplay = () => {
               <ProductCard
                 key={product.id}
                 product={product}
-                onToggle={() => handleToggleAvailability(category.id, product.id)}
+                onToggle={() =>
+                  handleToggleAvailability(category.id, product.id)
+                }
+                onAddToOrder={() =>
+                  handleAddToOrder(product.id, product.name, product.price)
+                }
               />
             ))}
           </div>
         </div>
       ))}
-    </div>
-  );
-};
+      {order.length > 0 && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <button
+            onClick={() => setDrawerOpened(true)}
+            className="bg-red-700 text-white px-6 py-3 rounded-full shadow-md hover:bg-red-800 transition"
+          >
+            View Order ({order.length})
+          </button>
+        </div>
+      )}
 
-export default MenuDisplay;
+      <OrderDrawer
+        opened={drawerOpened}
+        onClose={() => setDrawerOpened(false)}
+        order={order}
+        onRemove={handleRemoveFromOrder}
+        onClear={handleClearOrder}
+      />
+    </div>
+  )
+}
+
+export default MenuDisplay

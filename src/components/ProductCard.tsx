@@ -4,9 +4,10 @@ import AvailabilityToggle from './AvailabilityToggle';
 interface ProductCardProps {
   product: Product;
   onToggle: () => void;
+  onAddToOrder: () => void;
 }
 
-const ProductCard = ({ product, onToggle }: ProductCardProps) => {
+const ProductCard = ({ product, onToggle, onAddToOrder }: ProductCardProps) => {
   return (
     <div className="bg-white border rounded-xl p-4 shadow-sm hover:shadow-md transition duration-300">
       <div className="flex items-center justify-between mb-2">
@@ -27,6 +28,14 @@ const ProductCard = ({ product, onToggle }: ProductCardProps) => {
       )}
 
      <AvailabilityToggle available={product.available} onToggle={onToggle}/>
+     {product.available &&(
+      <button
+        onClick={onAddToOrder}
+        className="mt-4 w-full bg-red-700 text-white py-2 rounded hover:bg-red-800 transition"
+        >
+            Add to order
+      </button>
+     )}
     </div>
   );
 };
