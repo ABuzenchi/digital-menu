@@ -26,7 +26,7 @@ const OrderDrawer = ({ opened, onClose, order, onRemove, onClear }: OrderDrawerP
       position="right"
       size="md"
       padding="md"
-      overlayProps={{ opacity: 0.4, blur: 2 }}
+      overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
     >
       {order.length === 0 ? (
         <Text >Your order is empty.</Text>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { menuData as initialMenuData } from '../data/menuData'
 import ProductCard from './ProductCard'
 import OrderDrawer from './OrderDrawer'
+import { Button } from '@mantine/core'
 
 interface OrderItem {
   id: string
@@ -117,12 +118,14 @@ const handleClearOrder = () => {
       ))}
       {order.length > 0 && (
         <div className="fixed bottom-6 right-6 z-50">
-          <button
+          <Button
+         variant="light"
             onClick={() => setDrawerOpened(true)}
             className="bg-red-700 text-white px-6 py-3 rounded-full shadow-md hover:bg-red-800 transition"
+            color="red"
           >
             View Order ({order.length})
-          </button>
+          </Button>
         </div>
       )}
 
