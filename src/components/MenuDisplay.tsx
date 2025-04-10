@@ -1,15 +1,33 @@
 import { useState } from 'react';
-import { menuData } from '../data/menuData'
-import ProductCard from './ProductCard'
+import { menuData as initialMenuData } from '../data/menuData';
+import ProductCard from './ProductCard';
 
 const MenuDisplay = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [menu, setMenu] = useState(initialMenuData); 
 
-  const categories = menuData.map((cat) => cat.category);
+  const categories = menu.map((cat) => cat.category);
+
+  const handleToggleAvailability = (categoryId: string, productId: string) => {
+    const updatedMenu = menu.map((category) => {
+      if (category.id !== categoryId) return category;
+
+      return {
+        ...category,
+        products: category.products.map((product) =>
+          product.id === productId
+            ? { ...product, available: !product.available }
+            : product
+        ),
+      };
+    });
+
+    setMenu(updatedMenu);
+  };
 
   const filteredData = selectedCategory
-    ? menuData.filter((cat) => cat.category === selectedCategory)
-    : menuData;
+    ? menu.filter((cat) => cat.category === selectedCategory)
+    : menu;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -49,7 +67,11 @@ const MenuDisplay = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {category.products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                onToggle={() => handleToggleAvailability(category.id, product.id)}
+              />
             ))}
           </div>
         </div>
@@ -58,4 +80,4 @@ const MenuDisplay = () => {
   );
 };
 
-export default MenuDisplay
+export default MenuDisplay;
