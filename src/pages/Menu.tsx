@@ -1,5 +1,11 @@
+import MenuDisplay from 'components/MenuDispaly'
+import { menuData } from '../data/menuData'
+
 const Menu = () => {
-  return <h1>Menu Page</h1>;
+  return (
+   <MenuDisplay/>
+     
+  )
 }
 
-export default Menu;
+export default Menu
